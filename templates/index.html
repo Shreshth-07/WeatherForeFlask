@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+
+
+{% endblock %}
+
+
+{% block body %}
+
+<div>
+    <h4 style="display:inline" class=" float-right">{{today_date}}</h4>
+    <br>
+    <h1 style="display:inline" >   </h1>
+</div>
+
+<br>
+
+<main role="main">
+    <div class="jumbotron">
+        <div class="col-sm-8 mx-auto">
+            <h1>AI weather forecast</h1>
+     
+            <p>
+                This is a prototype website that displays predicted weather variables by means of machine learning and artificial intelligence.
+            </p>
+            <p>
+                We collect the data from a weather station located in the city of Puerto Madryn, Patagonia Argentina.
+            </p>    
+            <p>    
+                To see the progress of the weather station, please click here:
+            </p>
+            <p>
+                <a class="btn btn-primary" href="https://www.wunderground.com/dashboard/pws/ICTPUERT3" role="button">Weather Station
+                    &raquo;</a>
+            </p>
+        </div>
+    </div>
+</main>
+
+<div>
+    <br>
+    <br>
+    <strong style = "font-family:georgia,garamond,serif;font-size:20px;font-style:italic;"> <q>{{ frases[rand][0]}} </q></strong>
+    <br>
+    <small style = "font-size:18px;" > {{ frases[rand][1]}} </small>
+    <br>
+    <br>
+    
+    <small> Querés saber más sobre {{ frases[rand][1]}}?, <a href="https://www.ecosia.org/search?q={{frases[rand][1]}}"  target="_blank"> aprete aquí </a>  </small>     
+   
+</div>
+
+
+{% endblock %}

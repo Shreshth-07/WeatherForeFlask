@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block body %} 
+
+
+<hr>
+<h2> Editar producto </h2>
+
+
+
+<form action='/posts/edit/{{post.id}}' method='POST'>
+
+    
+    <input class="form-control" type='text' name='content' id='content' placeholder="Producto" aria-label="Producto" value='{{post.content}}'>
+    <input class="form-control" type='text' name='quantity' id='quantity' placeholder="Cantidad" aria-label="Cantidad" value='{{post.quantity}}'>
+
+    <input type='submit' value='Guardar cambios'>
+    <br>
+</form>
+
+
+
+
+
+{% endblock %}
