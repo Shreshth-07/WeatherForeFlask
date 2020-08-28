@@ -8,14 +8,17 @@
 
 
 {% block body %}
-<small> Hi, {{ current_user.username }} </small>
-<div>
-    <h4 style="display:inline" class=" float-right">{{today_date}}</h4>
-    <br>
-    <h1 style="display:inline" >   </h1>
-</div>
 
-<br>
+<div class="just-margin">
+        <p>
+            {% if current_user.is_authenticated %}
+                <h4 style="display:inline" class=" float-left"> Hi {{ current_user.username }} </h4>
+            {% endif %}
+            <h4 style="display:inline" class=" float-right">{{today_date}}</h4>  
+        </p>
+</div>
+<Br>
+
 
 <main role="main">
     <div class="jumbotron">
@@ -23,10 +26,10 @@
             <h1>AI weather forecast</h1>
      
             <p>
-                This is a prototype website that displays predicted weather variables by means of machine learning and artificial intelligence.
+                This is a prototype website that displays weather variables predicted by means of machine learning and artificial intelligence.
             </p>
             <p>
-                The data is collected from a weather station located in the city of <a href="https://www.google.com/maps/place/Puerto+Madryn,+Chubut/@-42.7683807,-65.0958756,12z/data=!3m1!4b1!4m5!3m4!1s0xbe02355e87a2ead1:0x1e890d2810b44382!8m2!3d-42.7694476!4d-65.0317175" target="_blank"> Puerto Madryn, Patagonia Argentina. </a> 
+                The data is collected from a weather station located in the city of <a href="https://www.google.com/maps/place/Puerto+Madryn,+Chubut/@-42.7683807,-65.0958756,12z/data=!3m1!4b1!4m5!3m4!1s0xbe02355e87a2ead1:0x1e890d2810b44382!8m2!3d-42.7694476!4d-65.0317175" target="_blank"> <a href="https://www.google.com/maps/place/Puerto+Madryn,+Chubut/@-42.7683807,-65.0958756,12z/data=!3m1!4b1!4m5!3m4!1s0xbe02355e87a2ead1:0x1e890d2810b44382!8m2!3d-42.7694476!4d-65.0317175" target="_blank"> Puerto Madryn, Patagonia Argentina. </a> 
             </p>    
             <p>    
                 To see the progress of the weather station, please click here:
@@ -41,14 +44,13 @@
 
 <div>
     <br>
-    <br>
     <strong style = "font-family:georgia,garamond,serif;font-size:20px;font-style:italic;"> <q>{{ frases[rand][0]}} </q></strong>
     <br>
     <small style = "font-size:18px;" > {{ frases[rand][1]}} </small>
     <br>
     <br>
     
-    <small> Querés saber más sobre {{ frases[rand][1]}}?, <a href="https://www.ecosia.org/search?q={{frases[rand][1]}}"  target="_blank"> aprete aquí </a>  </small>     
+    <small> Do you want to know more about {{ frases[rand][1]}}? <a href="https://www.ecosia.org/search?q={{frases[rand][1]}}"  target="_blank"> press here </a>  </small>     
    
 </div>
 

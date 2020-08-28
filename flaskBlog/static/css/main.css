@@ -38,7 +38,11 @@ td {
         width: 10%;
     }
 
-
+.just-margin br {
+    content: "";
+    display: block;
+    margin: 2em;
+    }
 
 
 #content {

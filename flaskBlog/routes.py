@@ -52,7 +52,7 @@ scheduler.start()
 def index():
     q = request.args.get('q')
     rand = random.randint(0,len(frases))
-    return render_template('index.html',today_date=local_time,frases=frases,rand=rand,q=q)       
+    return render_template('index.html',today_date=local_time,frases=frases,rand=rand,q=q,current_user=current_user)       
 
 
 @app.route('/posts',methods=['GET','POST'])
