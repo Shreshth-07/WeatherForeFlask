@@ -18,19 +18,19 @@
 
 
 <hr>
-<h2> Agrega un producto a la lista </h2>
+<h2> Tasks </h2>
 <form action='/posts' method='POST'>
 
     
-    <input class="form-control" type='text' name='content' id='content' placeholder="Producto" aria-label="Producto">
+    <input class="form-control" type='text' name='content' id='content' placeholder="Task" aria-label="Task">
     <input class="form-control" type='text' name='quantity' id='quantity' placeholder="Cantidad" aria-label="Cantidad">
 
-    <input type='submit' value='Agregar'>
+    <input type='submit' value='Add'>
     <br>
 </form>
 <hr>
 <div class="container">
-    <a class="rtejustify" style="text-align: left;" href='/posts/delete/all' >Eliminar todo</a>
+    <a class="rtejustify" style="text-align: left;" href='/posts/delete/all' >Delete All</a>
 
 <form action='/numero' method='GET'>
     <input  type='submit' value='Enviar lista por WhatsApp'>
@@ -51,8 +51,8 @@
 <!-- <small> {{ rey.date_created.strftime('%d %B %Y - %H:%M:%S') }} </small> -->
 
 <small>
-<a class="btn btn-primary btn-sm" href='/posts/edit/{{rey.id}}'>Editar</a>
-<a class="btn btn-danger btn-sm" href='/posts/delete/{{rey.id}}'>Eliminar</a>
+<a class="btn btn-primary btn-sm" href='/posts/edit/{{rey.id}}'>Edit</a>
+<a class="btn btn-danger btn-sm" href='/posts/delete/{{rey.id}}'>Delete</a>
 
 </small>
 <hr>

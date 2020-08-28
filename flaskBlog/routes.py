@@ -1,7 +1,4 @@
-from flask import Flask,render_template,url_for,request,redirect,jsonify
-import os
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from flask import render_template,url_for,request,redirect,jsonify,flash
 import pandas as pd
 import numpy as np
 import traceback
@@ -9,28 +6,25 @@ from datetime import datetime
 from pytz import timezone 
 from apscheduler.schedulers.background import BackgroundScheduler   
 import csv
-import function_max as func_max
-import function_min as func_min
-import whatsapp as wa
 import pickle
 import random
 
 
 
-#from sklearn.externals import joblib
-
-app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-
-db = SQLAlchemy(app)
+import flaskBlog.function_max as func_max
+import flaskBlog.function_min as func_min
+import flaskBlog.whatsapp as wa
+from flaskBlog.models import User, Todo
+from flaskBlog.forms import RegistrationForm, LoginForm
+from flask_login import login_user,current_user,logout_user, login_required
+from flaskBlog import app, db, bcrypt
 
 # current time
 timezone = timezone('America/Argentina/ComodRivadavia')
 local_time = datetime.now(timezone).strftime('%d-%m-%Y')
 
 # phrases lists
-with open("frases.txt", "rb") as fp:   # Unpickling
+with open("flaskBlog/frases.txt", "rb") as fp:   # Unpickling
     frases = pickle.load(fp)
 
 
@@ -38,10 +32,10 @@ def max_temp():
     print('ready to go!!!')
     max_temp = func_max.request_preproc()
     min_temp = func_min.request_preproc()
-    with open("max_temp.csv","a") as file:
+    with open("flaskBlog/max_temp.csv","a") as file:
         writer = csv.writer(file)
         writer.writerow(max_temp)
-    with open("min_temp.csv","a") as file:
+    with open("flaskBlog/min_temp.csv","a") as file:
         writer = csv.writer(file)
         writer.writerow(min_temp)
     return render_template("weather.html")
@@ -54,39 +48,26 @@ scheduler.add_job(func = max_temp,trigger ='cron', hour=13, minute=10)
 scheduler.start()
 
 
-
-
-class Todo(db.Model):
-    id = db.Column(db.Integer,primary_key=True) # these will be unique
-    content = db.Column(db.Text, nullable=False) # the user cannot leave it empty
-    quantity = db.Column(db.String(10),nullable=False,default='no importa')
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-    #this function occurs every time we create a new element
-    def __repr__(self):
-        return 'Task' + str(self.id)
-
-
-
-@app.route('/',methods=['POST','GET'])
+@app.route('/',methods=['GET'])
 def index():
+    q = request.args.get('q')
     rand = random.randint(0,len(frases))
-    if request.method == 'POST':
-        pass
-    else:
-        return render_template('index.html',today_date=local_time,frases=frases,rand=rand)       
+    return render_template('index.html',today_date=local_time,frases=frases,rand=rand,q=q)       
+
 
 @app.route('/posts',methods=['GET','POST'])
+@login_required
 def posts():
     if request.method == 'POST':
         post_content = request.form['content']
         post_quantity = request.form['quantity']
-        new_post = Todo(content=post_content,quantity=post_quantity)
+        new_post = Todo(content=post_content,quantity=post_quantity,user_id=current_user.id)
         db.session.add(new_post)
         db.session.commit()
         return redirect('/posts')
     else: # if we dont post, we want to display
-        listita = Todo.query.order_by(Todo.date_created).all()
+        #listita = Todo.query.order_by(Todo.date_created).all() #filter by current_user.id
+        listita = Todo.query.filter_by(user_id=current_user.id)
         return render_template('posts.html', reyes=listita)
 
 
@@ -115,12 +96,13 @@ def edit(id):
         return render_template('edit.html',post=post)
     
 @app.route('/weather')
+@login_required
 def weather_forecast():
-    with open("max_temp.csv","r") as file:
+    with open("flaskBlog/max_temp.csv","r") as file:
         reader = csv.reader(file)
         max_T = list(reader)
         max_T = ''.join([str(elem) for elem in max_T[-1]])
-    with open("min_temp.csv","r") as file:
+    with open("flaskBlog/min_temp.csv","r") as file:
         reader = csv.reader(file)
         min_T = list(reader)
         min_T = ''.join([str(elem) for elem in min_T[-1]])
@@ -147,12 +129,43 @@ def numero():
 def about():
     return render_template("about.html")
 
-if __name__ == '__main__':
-    app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True,host=os.getenv('IP', '0.0.0.0'), 
-            port=int(os.getenv('PORT', 4444)))
+
+@app.route("/register",methods=['GET','POST'])
+def registration():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        user = User(username=username,email=email,password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Your account has been created. You are ready to login.', 'success')
+        return redirect(url_for("login"))
+    return render_template('register.html',title='Register',form=form)
 
 
 
+@app.route("/login", methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password,form.password.data): 
+            login_user(user,remember=form.remember.data)
+            return redirect(url_for('index'))
+        else:
+            flash("Login Unsuccessful. Please check email and password", 'danger')
+    return render_template('login.html',title='Login',form=form)
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+
+@app.route("/account")
+@login_required
+def account():
+    return render_template('account.html', title="Account")

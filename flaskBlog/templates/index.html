@@ -8,7 +8,7 @@
 
 
 {% block body %}
-
+<small> Hi, {{ current_user.username }} </small>
 <div>
     <h4 style="display:inline" class=" float-right">{{today_date}}</h4>
     <br>
@@ -26,7 +26,7 @@
                 This is a prototype website that displays predicted weather variables by means of machine learning and artificial intelligence.
             </p>
             <p>
-                We collect the data from a weather station located in the city of Puerto Madryn, Patagonia Argentina.
+                The data is collected from a weather station located in the city of <a href="https://www.google.com/maps/place/Puerto+Madryn,+Chubut/@-42.7683807,-65.0958756,12z/data=!3m1!4b1!4m5!3m4!1s0xbe02355e87a2ead1:0x1e890d2810b44382!8m2!3d-42.7694476!4d-65.0317175" target="_blank"> Puerto Madryn, Patagonia Argentina. </a> 
             </p>    
             <p>    
                 To see the progress of the weather station, please click here:
