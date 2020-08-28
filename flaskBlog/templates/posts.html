@@ -23,7 +23,6 @@
 
     
     <input class="form-control" type='text' name='content' id='content' placeholder="Task" aria-label="Task">
-    <input class="form-control" type='text' name='quantity' id='quantity' placeholder="Cantidad" aria-label="Cantidad">
 
     <input type='submit' value='Add'>
     <br>
@@ -31,13 +30,14 @@
 <hr>
 <div class="container">
     <a class="rtejustify" style="text-align: left;" href='/posts/delete/all' >Delete All</a>
-
+<!--
 <form action='/numero' method='GET'>
     <input  type='submit' value='Enviar lista por WhatsApp'>
 
     <input class="rtejustify" style="text-align: left; margin-left: 900px;width: 200px;" type='text' name='phone_number' id='phone_number' placeholder="Introduce tu número" value = '+549'>
 
 </form> 
+-->
     <br>
 </div>              
 <hr size="8px" color="black" />
@@ -45,7 +45,7 @@
 {% for rey in reyes %}
 
 
-<small style="font-size:18px"> {{ rey.quantity }} </small>
+
 <small style="font-size:18px"> <b>{{ rey.content }} </b></small>
 
 <!-- <small> {{ rey.date_created.strftime('%d %B %Y - %H:%M:%S') }} </small> -->
@@ -53,9 +53,13 @@
 <small>
 <a class="btn btn-primary btn-sm" href='/posts/edit/{{rey.id}}'>Edit</a>
 <a class="btn btn-danger btn-sm" href='/posts/delete/{{rey.id}}'>Delete</a>
-
 </small>
+<br>
+
+<small style="font-size:10px"> {{ rey.date_created.date() }} </small>
+
 <hr>
+
 
 {% endfor %}
 

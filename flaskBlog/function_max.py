@@ -89,11 +89,11 @@ def preprocess(df):
     df_predict['temp_minAvg_weekly'] = 6.
     
     # normliazation
-    scaler = joblib.load('scaler.pkl')
+    scaler = joblib.load('flaskBlog/scaler.pkl')
     to_predict = scaler.transform(df_predict)
 
     #prediction
-    model = joblib.load('model.pkl')
+    model = joblib.load('flaskBlog/model.pkl')
     max_temp = model.predict(to_predict)
 
     return max_temp

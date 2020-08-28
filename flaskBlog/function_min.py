@@ -89,11 +89,11 @@ def preprocess(df):
     df_predict['temp_minAvg_weekly'] = 6.
     
     # normalization
-    scaler = joblib.load('scaler.pkl')
+    scaler = joblib.load('flaskBlog/scaler.pkl')
     to_predict = scaler.transform(df_predict)
 
     #prediction
-    model = joblib.load('model_min.pkl')
+    model = joblib.load('flaskBlog/model_min.pkl')
     min_temp = model.predict(to_predict)
 
     return min_temp

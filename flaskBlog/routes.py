@@ -44,7 +44,7 @@ def max_temp():
 
 # scheduler
 scheduler = BackgroundScheduler(daemon=True, timezone = 'America/Argentina/ComodRivadavia')
-scheduler.add_job(func = max_temp,trigger ='cron', hour=13, minute=10)
+scheduler.add_job(func = max_temp,trigger ='cron', hour=0, minute=15)
 scheduler.start()
 
 
@@ -60,8 +60,7 @@ def index():
 def posts():
     if request.method == 'POST':
         post_content = request.form['content']
-        post_quantity = request.form['quantity']
-        new_post = Todo(content=post_content,quantity=post_quantity,user_id=current_user.id)
+        new_post = Todo(content=post_content,user_id=current_user.id)
         db.session.add(new_post)
         db.session.commit()
         return redirect('/posts')

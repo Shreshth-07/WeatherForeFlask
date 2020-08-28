@@ -21,8 +21,7 @@ class User(db.Model,UserMixin):
 class Todo(db.Model):
     __tablename__ = 'todo'
     id = db.Column(db.Integer,primary_key=True) # these will be unique
-    content = db.Column(db.String(50), nullable=False) # the user cannot leave it empty
-    quantity = db.Column(db.String(10),nullable=False)
+    content = db.Column(db.String(200), nullable=False) # the user cannot leave it empty
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
